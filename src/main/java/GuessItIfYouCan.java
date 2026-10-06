@@ -32,7 +32,10 @@ public class GuessItIfYouCan {
     }
     
     public static boolean singlePlayer(){
-      return true;  
+        
+        System.out.println("tryout");
+        
+        return true;
     }
     
     public static boolean multiPlayer(){        
