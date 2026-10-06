@@ -67,7 +67,7 @@ public class GuessItIfYouCan { // Main Class
         return word;
     }
     
-    public static boolean[] check(Scanner scanner, String word){
+    public static boolean check(Scanner scanner, String word){
         boolean[] validator = new boolean[word.length()];
         for(int i = 0; i < 5; i++){
             String guess = scanner.nextLine();
