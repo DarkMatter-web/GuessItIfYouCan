@@ -1,13 +1,6 @@
+/*
 import java.util.Scanner;
 import java.util.Arrays;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
-/**
- *
- * @author elash
- */
 import java.util.ArrayList;
 
 
