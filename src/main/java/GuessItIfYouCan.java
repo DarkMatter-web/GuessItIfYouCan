@@ -35,14 +35,26 @@ public class GuessItIfYouCan { // Main Class
     }
     
     public static boolean singlePlayer(){
-      return true;  
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Difficulty 1 or 2");
+        
+        String word = singleWord(scanner);
+        
+        boolean[] result = check (scanner, word);
+        
+        if (Arrays.equals(result, new boolean[]{true, true, true, true, true})){
+            return true;
+        } else{
+            return false;
+        } 
     }
     
     public static boolean multiPlayer(){        
         Scanner scanner = new Scanner(System.in);
         System.out.println("Player 1 - Write a 5 letter word");
         
-        String word = theWord(scanner);
+        String word = multiWord(scanner);
         
         System.out.println("Player 2 - Make a guess");
         
@@ -55,19 +67,19 @@ public class GuessItIfYouCan { // Main Class
         }
     }
     
-    public static String theWord(Scanner scanner){
+    public static String multiWord(Scanner scanner){
 
         String word = scanner.nextLine();
         
         if (word.length() != 5){
             System.out.println("Try again, 5 letter word");
-            return theWord(scanner);
+            return multiWord(scanner);
         }
         
         return word;
     }
     
-    public static boolean check(Scanner scanner, String word){
+    public static boolean[] check(Scanner scanner, String word){
         boolean[] validator = new boolean[word.length()];
         for(int i = 0; i < 5; i++){
             String guess = scanner.nextLine();
@@ -89,24 +101,16 @@ public class GuessItIfYouCan { // Main Class
         
         
         return validator;
-
-        boolean isSinglePlayer = true;
-
-        GuessItIfYouCan single = new GuessItIfYouCan();
-        //GuessItIfYouCan multi = new GuessItIfYouCan();
-
-        if (isSinglePlayer) {
-            single.SinglePlayer();
-        }/* else if (playerNumber = false) {
-            multi.MultiPlayer();
-        }*/
-
     }
 
-    public void SinglePlayer() {
-
-        boolean isEasy = true;
-
+    
+    
+    public static String singleWord(Scanner scanner){
+        String word;
+        int mode = scanner.nextInt();
+        scanner.nextLine();
+        int randomIndex;
+        
         ArrayList<String> easyWords = new ArrayList<>();
 
         easyWords.add("RAISE");
@@ -124,17 +128,22 @@ public class GuessItIfYouCan { // Main Class
 
         java.util.Random random = new java.util.Random();
         
-        String word = "";
-
-        if (isEasy) {
-            int randomIndex = random.nextInt(easyWords.size());
-            word = easyWords.get(randomIndex);
-        } else {
-            int randomIndex = random.nextInt(hardWords.size());
-            word = hardWords.get(randomIndex);
+        switch(mode){
+            case 1:
+                randomIndex = random.nextInt(easyWords.size());
+                word = easyWords.get(randomIndex);
+                break;
+            case 2:
+                randomIndex = random.nextInt(hardWords.size());
+                word = hardWords.get(randomIndex);
+                break;
+            default:
+                System.out.println("Wrong game mode, choose mode 1 or 2");
+                word = singleWord(scanner);
         }
-
+        
+        System.out.println(word);
+        
+        return word;
     }
-
 }
-
