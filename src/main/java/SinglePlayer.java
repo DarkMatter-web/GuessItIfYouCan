@@ -11,9 +11,9 @@ public class SinglePlayer {
         
         String word = WordLab.single(scanner);
         
-        boolean[] result = GuessLoop.guess(scanner, word);
+        String[] result = GuessLoop.guess(scanner, word);
         
-        if (Arrays.equals(result, new boolean[]{true, true, true, true, true})){
+        if (Arrays.equals(result, new String[]{"green", "green", "green", "green", "green"})){
             return true;
         } else{
             return false;
