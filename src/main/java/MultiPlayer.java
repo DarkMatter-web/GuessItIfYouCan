@@ -12,9 +12,9 @@ public class MultiPlayer {
         
         System.out.println("Player 2 - Make a guess");
         
-        boolean[] result = GuessLoop.guess(scanner, word);
+        String[] result = GuessLoop.guess(scanner, word);
         
-        if (Arrays.equals(result, new boolean[]{true, true, true, true, true})){
+        if (Arrays.equals(result, new String[]{"green", "green", "green", "green", "green"})){
             return true;
         } else{
             return false;
