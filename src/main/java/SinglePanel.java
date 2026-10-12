@@ -1,3 +1,7 @@
+
+import javax.swing.*;
+import java.awt.*;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
@@ -8,12 +12,39 @@
  * @author karlis
  */
 public class SinglePanel extends javax.swing.JPanel {
+    
+    private JLabel[][] cells = new JLabel[5][5];
 
     /**
      * Creates new form SinglePanel
      */
     public SinglePanel() {
         initComponents();
+        
+        gridPanel.setLayout(new GridLayout(5, 5, 5, 5));
+        createGrid();
+    }
+    
+    private void createGrid() {
+
+        gridPanel.removeAll();
+
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
+
+                JLabel label = new JLabel("", SwingConstants.CENTER);
+
+                label.setOpaque(true);
+                label.setBackground(Color.WHITE);
+                label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+                cells[row][col] = label;
+                gridPanel.add(label);
+            }
+        }
+
+        gridPanel.revalidate();
+        gridPanel.repaint();
     }
 
     /**
@@ -25,30 +56,64 @@ public class SinglePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        gridPanel = new javax.swing.JPanel();
+        keyboardPanel = new javax.swing.JPanel();
 
-        jLabel1.setText("single");
+        setPreferredSize(new java.awt.Dimension(400, 300));
+
+        gridPanel.setPreferredSize(new java.awt.Dimension(200, 200));
+
+        javax.swing.GroupLayout gridPanelLayout = new javax.swing.GroupLayout(gridPanel);
+        gridPanel.setLayout(gridPanelLayout);
+        gridPanelLayout.setHorizontalGroup(
+            gridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        gridPanelLayout.setVerticalGroup(
+            gridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+
+        keyboardPanel.setPreferredSize(new java.awt.Dimension(250, 100));
+
+        javax.swing.GroupLayout keyboardPanelLayout = new javax.swing.GroupLayout(keyboardPanel);
+        keyboardPanel.setLayout(keyboardPanelLayout);
+        keyboardPanelLayout.setHorizontalGroup(
+            keyboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 250, Short.MAX_VALUE)
+        );
+        keyboardPanelLayout.setVerticalGroup(
+            keyboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(175, 175, 175)
-                .addComponent(jLabel1)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(138, 138, 138)
-                .addComponent(jLabel1)
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel gridPanel;
+    private javax.swing.JPanel keyboardPanel;
     // End of variables declaration//GEN-END:variables
 }
