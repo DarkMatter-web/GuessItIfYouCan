@@ -7,6 +7,10 @@ public class Start {
         Scanner scanner = new Scanner(System.in);
         boolean win;
         
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainGUI().setVisible(true);
+        });
+        
         System.out.println("Choose game mode, 1 or 2");
         
         int mode = scanner.nextInt();
