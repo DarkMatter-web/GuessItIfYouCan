@@ -14,6 +14,9 @@ import java.awt.*;
 public class SinglePanel extends javax.swing.JPanel {
     
     private JLabel[][] cells = new JLabel[5][5];
+    private int currentRow = 0;
+    private int currentCol = 0;
+    private String secretWord;
 
     /**
      * Creates new form SinglePanel
@@ -23,6 +26,9 @@ public class SinglePanel extends javax.swing.JPanel {
         
         gridPanel.setLayout(new GridLayout(5, 5, 5, 5));
         createGrid();
+        createKeyboard();
+        
+        secretWord = WordLab.single(1);
     }
     
     private void createGrid() {
@@ -46,6 +52,147 @@ public class SinglePanel extends javax.swing.JPanel {
         gridPanel.revalidate();
         gridPanel.repaint();
     }
+    
+    private void createKeyboard() {
+
+        keyboardPanel.removeAll();
+        keyboardPanel.setLayout(new GridLayout(4, 1, 5, 5));
+
+        String[] rows = {
+            "QWERTYUIOP",
+            "ASDFGHJKL",
+            "ZXCVBNM"
+        };
+    
+        for (String row : rows) {
+    
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0));
+    
+            for (char letter : row.toCharArray()) {    
+                                
+                JButton button = new JButton(String.valueOf(letter));
+    
+                button.setPreferredSize(new Dimension(30, 40));
+                button.setMargin(new Insets(0, 0, 0, 0));
+                
+                button.addActionListener(e -> {
+                addLetter(String.valueOf(letter));
+                });
+
+                rowPanel.add(button);
+            }
+
+            keyboardPanel.add(rowPanel);
+        }
+
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0));
+
+        JButton enterButton = new JButton("ENTER");
+        JButton deleteButton = new JButton("DELETE");
+
+        enterButton.setPreferredSize(new Dimension(80, 40));
+        deleteButton.setPreferredSize(new Dimension(80, 40));
+        
+        enterButton.setMargin(new Insets(0, 0, 0, 0));
+        deleteButton.setMargin(new Insets(0, 0, 0, 0));
+        
+        enterButton.addActionListener(e -> {
+        submitGuess();
+        });
+
+        deleteButton.addActionListener(e -> {
+        deleteLetter();
+        });
+    
+        controlPanel.add(enterButton);
+        controlPanel.add(deleteButton);
+    
+        keyboardPanel.add(controlPanel);
+
+        keyboardPanel.revalidate();
+        keyboardPanel.repaint();
+    }
+    
+    private void addLetter(String letter) {
+
+        if (currentRow < 5 && currentCol < 5) {            
+            cells[currentRow][currentCol].setText(letter);
+            currentCol++;
+        }
+    }
+    
+    private void deleteLetter() {
+
+        if (currentCol > 0) {
+            currentCol--;
+            cells[currentRow][currentCol].setText("");
+        }
+    }
+    
+    private void colorGuess(String[] result) {
+
+        for (int col = 0; col < 5; col++) {
+
+            switch (result[col]) {
+
+                case "green":
+                    cells[currentRow][col].setBackground(Color.GREEN);
+                    break;
+
+                case "yellow":
+                    cells[currentRow][col].setBackground(Color.YELLOW);
+                    break;
+
+                case "red":
+                    cells[currentRow][col].setBackground(Color.GRAY);
+                    break;
+           }
+        }
+    }
+    
+    private void submitGuess() {
+
+        if (currentRow >= 5) {
+            return;
+        }
+
+        if (currentCol != 5) {
+            JOptionPane.showMessageDialog(this, "Enter 5 letters!");
+            return;
+        }
+
+        // Collect the letters from the current row
+        String guess = "";
+
+        for (int col = 0; col < 5; col++) {
+            guess += cells[currentRow][col].getText();
+        }
+
+        // Check the guess
+        String[] result = GuessLoop.checkGuess(secretWord, guess);
+
+        // Color the squares
+        colorGuess(result);
+
+        // Check for a win
+        if (guess.equals(secretWord)) {
+            JOptionPane.showMessageDialog(this, "You won!");
+            currentRow = 5;
+            return;
+        }
+
+        // Move to the next row
+        currentRow++;
+        currentCol = 0;
+
+        // Check for a loss
+        if (currentRow == 5) {
+            JOptionPane.showMessageDialog(this,
+                "You lost! The word was " + secretWord);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,7 +206,7 @@ public class SinglePanel extends javax.swing.JPanel {
         gridPanel = new javax.swing.JPanel();
         keyboardPanel = new javax.swing.JPanel();
 
-        setPreferredSize(new java.awt.Dimension(400, 300));
+        setPreferredSize(new java.awt.Dimension(400, 450));
 
         gridPanel.setPreferredSize(new java.awt.Dimension(200, 200));
 
@@ -74,17 +221,17 @@ public class SinglePanel extends javax.swing.JPanel {
             .addGap(0, 200, Short.MAX_VALUE)
         );
 
-        keyboardPanel.setPreferredSize(new java.awt.Dimension(250, 100));
+        keyboardPanel.setPreferredSize(new java.awt.Dimension(400, 200));
 
         javax.swing.GroupLayout keyboardPanelLayout = new javax.swing.GroupLayout(keyboardPanel);
         keyboardPanel.setLayout(keyboardPanelLayout);
         keyboardPanelLayout.setHorizontalGroup(
             keyboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         keyboardPanelLayout.setVerticalGroup(
             keyboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 200, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -92,22 +239,21 @@ public class SinglePanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(96, 96, 96))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

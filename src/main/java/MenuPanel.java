@@ -31,6 +31,8 @@ public class MenuPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
+        setPreferredSize(new java.awt.Dimension(400, 450));
+
         jButton1.setText("jButton1");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 

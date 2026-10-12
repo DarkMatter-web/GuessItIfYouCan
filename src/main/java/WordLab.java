@@ -59,4 +59,35 @@ public class WordLab {
         
         return word;
     }
+    
+    public static String single(int mode) {
+
+    ArrayList<String> easyWords = new ArrayList<>();
+
+    easyWords.add("RAISE");
+    easyWords.add("SLATE");
+    easyWords.add("AROSE");
+    easyWords.add("IRATE");
+
+    ArrayList<String> hardWords = new ArrayList<>();
+
+    hardWords.add("PARER");
+    hardWords.add("MYRRH");
+    hardWords.add("JAZZY");
+    hardWords.add("SWELL");
+    hardWords.add("PROXY");
+
+    java.util.Random random = new java.util.Random();
+
+    switch (mode) {
+        case 1:
+            return easyWords.get(random.nextInt(easyWords.size()));
+
+        case 2:
+            return hardWords.get(random.nextInt(hardWords.size()));
+
+        default:
+            throw new IllegalArgumentException("Invalid difficulty");
+    }
+    }
 }
