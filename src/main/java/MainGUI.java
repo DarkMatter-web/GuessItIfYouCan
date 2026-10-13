@@ -10,6 +10,8 @@
 public class MainGUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainGUI.class.getName());
+    private SinglePanel singlePanel;
+    private ResultPanel resultPanel;
 
     /**
      * Creates new form MainGUI
@@ -20,7 +22,6 @@ public class MainGUI extends javax.swing.JFrame {
         mainPanel.setLayout(new java.awt.CardLayout());
         
         mainPanel.add(new MenuPanel(this), "menu");
-        mainPanel.add(new SinglePanel(), "single");
         mainPanel.add(new MultiPanel(), "multi");
         
         showPanel("menu");
@@ -29,8 +30,29 @@ public class MainGUI extends javax.swing.JFrame {
     public void showPanel(String panelName) {
         java.awt.CardLayout layout =
             (java.awt.CardLayout) mainPanel.getLayout();
-
         layout.show(mainPanel, panelName);
+    }
+    
+    public void startSinglePlayer() {
+
+        if (singlePanel != null) {
+            mainPanel.remove(singlePanel);
+        }
+
+        singlePanel = new SinglePanel(this);
+        mainPanel.add(singlePanel, "single");
+        showPanel("single");
+    }
+    
+    public void showResult(boolean win, String word) {
+        
+        if (resultPanel != null) {
+            mainPanel.remove(resultPanel);
+        }
+        
+        resultPanel = new ResultPanel(this, win, word);
+        mainPanel.add(resultPanel, "result");
+        showPanel("result");
     }
 
     /**

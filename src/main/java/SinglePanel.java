@@ -13,16 +13,20 @@ import java.awt.*;
  */
 public class SinglePanel extends javax.swing.JPanel {
     
+    private MainGUI frame;    
     private JLabel[][] cells = new JLabel[5][5];
     private int currentRow = 0;
     private int currentCol = 0;
     private String secretWord;
-
+    private JButton[] keyboardButtons = new JButton[26];
+    
     /**
      * Creates new form SinglePanel
      */
-    public SinglePanel() {
+    public SinglePanel(MainGUI frame) {
         initComponents();
+        
+        this.frame = frame;
         
         gridPanel.setLayout(new GridLayout(5, 5, 5, 5));
         createGrid();
@@ -30,7 +34,7 @@ public class SinglePanel extends javax.swing.JPanel {
         
         secretWord = WordLab.single(1);
     }
-    
+      
     private void createGrid() {
 
         gridPanel.removeAll();
@@ -52,7 +56,7 @@ public class SinglePanel extends javax.swing.JPanel {
         gridPanel.revalidate();
         gridPanel.repaint();
     }
-    
+      
     private void createKeyboard() {
 
         keyboardPanel.removeAll();
@@ -75,11 +79,17 @@ public class SinglePanel extends javax.swing.JPanel {
     
                 button.setPreferredSize(new Dimension(30, 40));
                 button.setMargin(new Insets(0, 0, 0, 0));
+                button.setBackground(Color.WHITE);
+                button.setForeground(Color.BLACK);
+                button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                button.setOpaque(true);
                 
                 button.addActionListener(e -> {
                 addLetter(String.valueOf(letter));
                 });
-
+                
+                keyboardButtons[letter - 'A'] = button;
+                
                 rowPanel.add(button);
             }
 
@@ -97,6 +107,15 @@ public class SinglePanel extends javax.swing.JPanel {
         
         enterButton.setMargin(new Insets(0, 0, 0, 0));
         deleteButton.setMargin(new Insets(0, 0, 0, 0));
+        
+        enterButton.setBackground(Color.WHITE);
+        enterButton.setForeground(Color.BLACK);
+        enterButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        enterButton.setOpaque(true);
+        deleteButton.setBackground(Color.WHITE);
+        deleteButton.setForeground(Color.BLACK);
+        deleteButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        deleteButton.setOpaque(true);
         
         enterButton.addActionListener(e -> {
         submitGuess();
@@ -125,7 +144,7 @@ public class SinglePanel extends javax.swing.JPanel {
     
     private void deleteLetter() {
 
-        if (currentCol > 0) {
+        if (currentRow < 5 && currentCol > 0) {
             currentCol--;
             cells[currentRow][currentCol].setText("");
         }
@@ -154,11 +173,12 @@ public class SinglePanel extends javax.swing.JPanel {
 
         // Color the squares
         colorGuess(result);
+        colorKeyboard(guess, result);
 
         // Check for a win
         if (guess.equals(secretWord)) {
-            JOptionPane.showMessageDialog(this, "You won!");
             currentRow = 5;
+            frame.showResult(true, secretWord);
             return;
         }
 
@@ -168,8 +188,7 @@ public class SinglePanel extends javax.swing.JPanel {
 
         // Check for a loss
         if (currentRow == 5) {
-            JOptionPane.showMessageDialog(this,
-                "You lost! The word was " + secretWord);
+            frame.showResult(false, secretWord);
         }
     }
     
@@ -194,6 +213,38 @@ public class SinglePanel extends javax.swing.JPanel {
         }
     }
     
+    
+    private void colorKeyboard(String guess, String[] result) {
+        
+        for (int i = 0; i < 5; i++) {
+        
+            char letter = guess.charAt(i);
+            
+            JButton button = keyboardButtons[letter - 'A'];
+            
+            Color currentColor = button.getBackground();
+            
+            switch (result[i]) {
+                
+                case "green":
+                    button.setBackground(Color.GREEN);
+                    break;
+                    
+                    case "yellow":
+                    if (!Color.GREEN.equals(currentColor)) {
+                        button.setBackground(Color.YELLOW);
+                    }
+                    break;
+                    
+                    case "red":
+                    if (!Color.GREEN.equals(currentColor)
+                        && !Color.YELLOW.equals(currentColor)) {
+                        button.setBackground(Color.GRAY);
+                    }
+                    break;
+            }
+        }
+    }
     
 
     /**
