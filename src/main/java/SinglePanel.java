@@ -131,27 +131,6 @@ public class SinglePanel extends javax.swing.JPanel {
         }
     }
     
-    private void colorGuess(String[] result) {
-
-        for (int col = 0; col < 5; col++) {
-
-            switch (result[col]) {
-
-                case "green":
-                    cells[currentRow][col].setBackground(Color.GREEN);
-                    break;
-
-                case "yellow":
-                    cells[currentRow][col].setBackground(Color.YELLOW);
-                    break;
-
-                case "red":
-                    cells[currentRow][col].setBackground(Color.GRAY);
-                    break;
-           }
-        }
-    }
-    
     private void submitGuess() {
 
         if (currentRow >= 5) {
@@ -193,6 +172,29 @@ public class SinglePanel extends javax.swing.JPanel {
                 "You lost! The word was " + secretWord);
         }
     }
+    
+    private void colorGuess(String[] result) {
+
+        for (int col = 0; col < 5; col++) {
+
+            switch (result[col]) {
+
+                case "green":
+                    cells[currentRow][col].setBackground(Color.GREEN);
+                    break;
+
+                case "yellow":
+                    cells[currentRow][col].setBackground(Color.YELLOW);
+                    break;
+
+                case "red":
+                    cells[currentRow][col].setBackground(Color.GRAY);
+                    break;
+           }
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
