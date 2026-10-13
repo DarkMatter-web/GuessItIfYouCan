@@ -212,8 +212,7 @@ public class SinglePanel extends javax.swing.JPanel {
            }
         }
     }
-    
-    
+        
     private void colorKeyboard(String guess, String[] result) {
         
         for (int i = 0; i < 5; i++) {
