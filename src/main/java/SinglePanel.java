@@ -23,7 +23,7 @@ public class SinglePanel extends javax.swing.JPanel {
     /**
      * Creates new form SinglePanel
      */
-    public SinglePanel(MainGUI frame) {
+    public SinglePanel(MainGUI frame, int difficulty) {
         initComponents();
         
         this.frame = frame;
@@ -32,7 +32,7 @@ public class SinglePanel extends javax.swing.JPanel {
         createGrid();
         createKeyboard();
         
-        secretWord = WordLab.single(1);
+        secretWord = WordLab.single(difficulty);
     }
       
     private void createGrid() {

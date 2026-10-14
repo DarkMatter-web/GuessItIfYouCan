@@ -1,6 +1,9 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Random;
 
 
 public class WordLab {
@@ -16,13 +19,9 @@ public class WordLab {
         
         return word;
     }
-    
-    public static String single(Scanner scanner){
-        String word;
-        int mode = scanner.nextInt();
-        scanner.nextLine();
-        int randomIndex;
-        
+    /*
+    public static String single(int mode) {
+
         ArrayList<String> easyWords = new ArrayList<>();
 
         easyWords.add("RAISE");
@@ -39,55 +38,51 @@ public class WordLab {
         hardWords.add("PROXY");
 
         java.util.Random random = new java.util.Random();
-        
-        switch(mode){
+
+        switch (mode) {
             case 1:
-                randomIndex = random.nextInt(easyWords.size());
-                word = easyWords.get(randomIndex);
-                break;
+                return easyWords.get(random.nextInt(easyWords.size()));
+    
             case 2:
-                randomIndex = random.nextInt(hardWords.size());
-                word = hardWords.get(randomIndex);
-                break;
+                return hardWords.get(random.nextInt(hardWords.size()));
+    
             default:
-                System.out.println("Wrong game mode, choose mode 1 or 2");
-                word = single(scanner);
-                break;
+                throw new IllegalArgumentException("Invalid difficulty");
+        }
+    }*/
+    
+    
+    public static String single(int difficulty) {
+
+        ArrayList<String> words = new ArrayList<>();
+        
+        String fileName;
+        
+        if (difficulty == 1) {
+            fileName = "src/main/java/easyWords_300.txt";
+        } else {
+            fileName = "src/main/java/hardWords_300.txt";
         }
         
-        System.out.println(word);
-        
-        return word;
-    }
-    
-    public static String single(int mode) {
+        try {
+            Scanner fileScanner = new Scanner(new File(fileName));
 
-    ArrayList<String> easyWords = new ArrayList<>();
+            while (fileScanner.hasNextLine()) {
+                String word = fileScanner.nextLine();
+                words.add(word);
+            }
 
-    easyWords.add("RAISE");
-    easyWords.add("SLATE");
-    easyWords.add("AROSE");
-    easyWords.add("IRATE");
+            fileScanner.close();
 
-    ArrayList<String> hardWords = new ArrayList<>();
+        } catch (FileNotFoundException e) {
+            System.out.println("Word file not found.");
+            return "";
+        }
 
-    hardWords.add("PARER");
-    hardWords.add("MYRRH");
-    hardWords.add("JAZZY");
-    hardWords.add("SWELL");
-    hardWords.add("PROXY");
+         Random random = new Random();
 
-    java.util.Random random = new java.util.Random();
+        int randomIndex = random.nextInt(words.size());
 
-    switch (mode) {
-        case 1:
-            return easyWords.get(random.nextInt(easyWords.size()));
-
-        case 2:
-            return hardWords.get(random.nextInt(hardWords.size()));
-
-        default:
-            throw new IllegalArgumentException("Invalid difficulty");
-    }
+        return words.get(randomIndex);
     }
 }

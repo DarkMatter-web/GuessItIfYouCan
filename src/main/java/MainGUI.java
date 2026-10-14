@@ -22,6 +22,7 @@ public class MainGUI extends javax.swing.JFrame {
         mainPanel.setLayout(new java.awt.CardLayout());
         
         mainPanel.add(new MenuPanel(this), "menu");
+        mainPanel.add(new DifficultyPanel(this), "difficulty");
         mainPanel.add(new MultiPanel(), "multi");
         
         showPanel("menu");
@@ -33,13 +34,13 @@ public class MainGUI extends javax.swing.JFrame {
         layout.show(mainPanel, panelName);
     }
     
-    public void startSinglePlayer() {
+    public void startSinglePlayer(int difficulty) {
 
         if (singlePanel != null) {
             mainPanel.remove(singlePanel);
         }
 
-        singlePanel = new SinglePanel(this);
+        singlePanel = new SinglePanel(this, difficulty);
         mainPanel.add(singlePanel, "single");
         showPanel("single");
     }

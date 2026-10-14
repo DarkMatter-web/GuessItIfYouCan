@@ -41,6 +41,8 @@ public class ResultPanel extends javax.swing.JPanel {
         closeButton = new javax.swing.JButton();
         resultLabel = new javax.swing.JLabel();
 
+        setPreferredSize(new java.awt.Dimension(400, 450));
+
         playAgain.setText("PLAY AGAIN");
         playAgain.addActionListener(this::playAgainActionPerformed);
 
