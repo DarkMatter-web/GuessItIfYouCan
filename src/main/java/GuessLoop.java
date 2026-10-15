@@ -46,4 +46,24 @@ public class GuessLoop {
         
         return isIn;
     }
+    
+    public static String[] checkGuess(String word, String guess) {
+
+    String[] validator = new String[word.length()];
+
+    for (int j = 0; j < word.length(); j++) {
+
+        if (guess.charAt(j) == word.charAt(j)) {
+            validator[j] = "green";
+
+        } else if (inWord(word, guess, j)) {
+            validator[j] = "yellow";
+
+        } else {
+            validator[j] = "red";
+        }
+    }
+
+    return validator;
+}
 }
