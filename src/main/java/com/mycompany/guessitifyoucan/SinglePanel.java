@@ -1,14 +1,10 @@
+package com.mycompany.guessitifyoucan;
 
 import javax.swing.*;
 import java.awt.*;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-
 /**
- *
+ * Active gameplay board panel.
  * @author karlis
  */
 public class SinglePanel extends javax.swing.JPanel {
@@ -23,42 +19,90 @@ public class SinglePanel extends javax.swing.JPanel {
     /**
      * Creates new form SinglePanel
      */
-    public SinglePanel(MainGUI frame, int difficulty) {
+    public SinglePanel(MainGUI frame) {
         initComponents();
-        
         this.frame = frame;
         
-        gridPanel.setLayout(new GridLayout(5, 5, 5, 5));
+        // 1. Force the main background container layout to use GridBagLayout explicitly
+        this.setLayout(new java.awt.GridBagLayout());
+        
+        // 2. Clear out any bad layout definitions and create clean constraints for the Guess Grid
+        java.awt.GridBagConstraints gbcGrid = new java.awt.GridBagConstraints();
+        gbcGrid.gridx = 0;
+        gbcGrid.gridy = 0;
+        gbcGrid.gridwidth = 1;
+        gbcGrid.gridheight = 1;
+        gbcGrid.weightx = 1.0;
+        gbcGrid.weighty = 0.5; // Distributes space evenly inside the window frame
+        gbcGrid.anchor = java.awt.GridBagConstraints.SOUTH; // Pulls the grid down closer to the center
+        gbcGrid.insets = new java.awt.Insets(40, 0, 10, 0); // Adds a clean 10px buffer on the bottom
+        
+        // 3. Create clean constraints for the Virtual Keyboard Deck
+        java.awt.GridBagConstraints gbcKbd = new java.awt.GridBagConstraints();
+        gbcKbd.gridx = 0;
+        gbcKbd.gridy = 1;
+        gbcKbd.gridwidth = 1;
+        gbcKbd.gridheight = 1;
+        gbcKbd.weightx = 1.0;
+        gbcKbd.weighty = 0.5;
+        gbcKbd.anchor = java.awt.GridBagConstraints.NORTH; // Pulls the keyboard up closer to the center
+        gbcKbd.insets = new java.awt.Insets(10, 0, 40, 0); // Adds a clean 40px margin at the bottom of the window
+        
+        // 4. Force NetBeans to remount the panels using our clean code constraints
+        this.removeAll();
+        this.add(gridPanel, gbcGrid);
+        this.add(keyboardPanel, gbcKbd);
+        
         createGrid();
         createKeyboard();
         
-        secretWord = WordLab.single(difficulty);
+        // Ensure the sub-containers claim proper dimensions
+        gridPanel.setPreferredSize(new java.awt.Dimension(400, 250));
+        keyboardPanel.setPreferredSize(new java.awt.Dimension(400, 220));
+        
+        secretWord = WordLab.single(1);
+        
+        // 5. Refresh the frame graphics layout to draw the changes instantly
+        this.revalidate();
+        this.repaint();
+    }
+
+
+    public void setSecretWord(String customWord) {
+        this.secretWord = customWord.toUpperCase();
     }
       
     private void createGrid() {
-
         gridPanel.removeAll();
+        gridPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
+        
+        JPanel innerGrid = new JPanel(new GridLayout(5, 5, 5, 5));
+        innerGrid.setOpaque(false);
 
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
-
                 JLabel label = new JLabel("", SwingConstants.CENTER);
+                java.awt.Dimension originalBoxSize = new java.awt.Dimension(45, 45);
+                label.setPreferredSize(originalBoxSize);
+                label.setMinimumSize(originalBoxSize);
+                label.setMaximumSize(originalBoxSize);
 
                 label.setOpaque(true);
                 label.setBackground(Color.WHITE);
                 label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                label.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 18));
 
                 cells[row][col] = label;
-                gridPanel.add(label);
+                innerGrid.add(label);
             }
         }
 
+        gridPanel.add(innerGrid);
         gridPanel.revalidate();
         gridPanel.repaint();
     }
       
     private void createKeyboard() {
-
         keyboardPanel.removeAll();
         keyboardPanel.setLayout(new GridLayout(4, 1, 5, 5));
 
@@ -69,14 +113,11 @@ public class SinglePanel extends javax.swing.JPanel {
         };
     
         for (String row : rows) {
-    
             JPanel rowPanel = new JPanel();
             rowPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0));
     
             for (char letter : row.toCharArray()) {    
-                                
                 JButton button = new JButton(String.valueOf(letter));
-    
                 button.setPreferredSize(new Dimension(30, 40));
                 button.setMargin(new Insets(0, 0, 0, 0));
                 button.setBackground(Color.WHITE);
@@ -84,15 +125,10 @@ public class SinglePanel extends javax.swing.JPanel {
                 button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
                 button.setOpaque(true);
                 
-                button.addActionListener(e -> {
-                addLetter(String.valueOf(letter));
-                });
-                
+                button.addActionListener(e -> addLetter(String.valueOf(letter)));
                 keyboardButtons[letter - 'A'] = button;
-                
                 rowPanel.add(button);
             }
-
             keyboardPanel.add(rowPanel);
         }
 
@@ -104,7 +140,6 @@ public class SinglePanel extends javax.swing.JPanel {
 
         enterButton.setPreferredSize(new Dimension(80, 40));
         deleteButton.setPreferredSize(new Dimension(80, 40));
-        
         enterButton.setMargin(new Insets(0, 0, 0, 0));
         deleteButton.setMargin(new Insets(0, 0, 0, 0));
         
@@ -117,17 +152,11 @@ public class SinglePanel extends javax.swing.JPanel {
         deleteButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         deleteButton.setOpaque(true);
         
-        enterButton.addActionListener(e -> {
-        submitGuess();
-        });
-
-        deleteButton.addActionListener(e -> {
-        deleteLetter();
-        });
+        enterButton.addActionListener(e -> submitGuess());
+        deleteButton.addActionListener(e -> deleteLetter());
     
         controlPanel.add(enterButton);
         controlPanel.add(deleteButton);
-    
         keyboardPanel.add(controlPanel);
 
         keyboardPanel.revalidate();
@@ -135,7 +164,6 @@ public class SinglePanel extends javax.swing.JPanel {
     }
     
     private void addLetter(String letter) {
-
         if (currentRow < 5 && currentCol < 5) {            
             cells[currentRow][currentCol].setText(letter);
             currentCol++;
@@ -143,7 +171,6 @@ public class SinglePanel extends javax.swing.JPanel {
     }
     
     private void deleteLetter() {
-
         if (currentRow < 5 && currentCol > 0) {
             currentCol--;
             cells[currentRow][currentCol].setText("");
@@ -151,127 +178,87 @@ public class SinglePanel extends javax.swing.JPanel {
     }
     
     private void submitGuess() {
-
-        if (currentRow >= 5) {
-            return;
-        }
+        if (currentRow >= 5) return;
 
         if (currentCol != 5) {
             JOptionPane.showMessageDialog(this, "Enter 5 letters!");
             return;
         }
 
-        // Collect the letters from the current row
         String guess = "";
-
         for (int col = 0; col < 5; col++) {
             guess += cells[currentRow][col].getText();
         }
 
-        // Check the guess
         String[] result = GuessLoop.checkGuess(secretWord, guess);
-
-        // Color the squares
         colorGuess(result);
         colorKeyboard(guess, result);
 
-        // Check for a win
         if (guess.equals(secretWord)) {
             currentRow = 5;
             frame.showResult(true, secretWord);
             return;
         }
 
-        // Move to the next row
         currentRow++;
         currentCol = 0;
 
-        // Check for a loss
         if (currentRow == 5) {
             frame.showResult(false, secretWord);
         }
     }
     
     private void colorGuess(String[] result) {
-
         for (int col = 0; col < 5; col++) {
-
             switch (result[col]) {
-
-                case "green":
-                    cells[currentRow][col].setBackground(Color.GREEN);
-                    break;
-
-                case "yellow":
-                    cells[currentRow][col].setBackground(Color.YELLOW);
-                    break;
-
-                case "red":
-                    cells[currentRow][col].setBackground(Color.GRAY);
-                    break;
-           }
-        }
-    }
-        
-    private void colorKeyboard(String guess, String[] result) {
-        
-        for (int i = 0; i < 5; i++) {
-        
-            char letter = guess.charAt(i);
-            
-            JButton button = keyboardButtons[letter - 'A'];
-            
-            Color currentColor = button.getBackground();
-            
-            switch (result[i]) {
-                
-                case "green":
-                    button.setBackground(Color.GREEN);
-                    break;
-                    
-                    case "yellow":
-                    if (!Color.GREEN.equals(currentColor)) {
-                        button.setBackground(Color.YELLOW);
-                    }
-                    break;
-                    
-                    case "red":
-                    if (!Color.GREEN.equals(currentColor)
-                        && !Color.YELLOW.equals(currentColor)) {
-                        button.setBackground(Color.GRAY);
-                    }
-                    break;
+                case "green": cells[currentRow][col].setBackground(Color.GREEN); break;
+                case "yellow": cells[currentRow][col].setBackground(Color.YELLOW); break;
+                case "red": cells[currentRow][col].setBackground(Color.GRAY); break;
             }
         }
     }
     
+    private void colorKeyboard(String guess, String[] result) {
+        for (int i = 0; i < 5; i++) {
+            char letter = guess.charAt(i);
+            JButton button = keyboardButtons[letter - 'A'];
+            Color currentColor = button.getBackground();
+            
+            switch (result[i]) {
+                case "green":
+                    button.setBackground(Color.GREEN);
+                    break;
+                case "yellow":
+                    if (!Color.GREEN.equals(currentColor)) button.setBackground(Color.YELLOW);
+                    break;
+                case "red":
+                    if (!Color.GREEN.equals(currentColor) && !Color.YELLOW.equals(currentColor)) button.setBackground(Color.GRAY);
+                    break;
+            }
+        }
+    }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         gridPanel = new javax.swing.JPanel();
         keyboardPanel = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(400, 450));
+        setLayout(new java.awt.GridBagLayout());
 
         gridPanel.setPreferredSize(new java.awt.Dimension(200, 200));
-
-        javax.swing.GroupLayout gridPanelLayout = new javax.swing.GroupLayout(gridPanel);
-        gridPanel.setLayout(gridPanelLayout);
-        gridPanelLayout.setHorizontalGroup(
-            gridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        gridPanelLayout.setVerticalGroup(
-            gridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
+        gridPanel.setLayout(new java.awt.GridLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 200;
+        gridBagConstraints.ipady = 200;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 104, 0, 0);
+        add(gridPanel, gridBagConstraints);
 
         keyboardPanel.setPreferredSize(new java.awt.Dimension(400, 200));
 
@@ -286,29 +273,16 @@ public class SinglePanel extends javax.swing.JPanel {
             .addGap(0, 200, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(96, 96, 96))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(gridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 400;
+        gridBagConstraints.ipady = 200;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 38, 0);
+        add(keyboardPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel gridPanel;
