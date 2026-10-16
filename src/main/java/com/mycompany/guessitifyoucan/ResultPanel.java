@@ -1,3 +1,5 @@
+package com.mycompany.guessitifyoucan;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
@@ -11,22 +13,84 @@ public class ResultPanel extends javax.swing.JPanel {
     
     private MainGUI frame;
     
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton jButton1;
+    
+    private javax.swing.JButton btnExit;
+
+    
     /**
      * Creates new form ResultPanel
      */
+    
     public ResultPanel(MainGUI frame, boolean win, String word) {
-        initComponents();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton(); // Initialize the exit button object
         
+        initComponents();
         this.frame = frame;
         
+        this.setLayout(new java.awt.GridBagLayout());
+        
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new java.awt.Insets(10, 0, 20, 0); 
+        gbc.anchor = java.awt.GridBagConstraints.CENTER;
+        
+        this.removeAll();
+        
+        // --- 1. Game Status Title Row ---
         if (win) {
-            resultLabel.setText("YOU WON!");
+            jLabel1.setText("YOU WIN!");
+            jLabel1.setForeground(java.awt.Color.GREEN);
         } else {
-            resultLabel.setText(            
-            "<html><center>YOU LOST!<br>The word was " + word + "</center></html>"
-            );
+            jLabel1.setText("GAME OVER!");
+            jLabel1.setForeground(java.awt.Color.RED);
         }
+        jLabel1.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 28));
+        this.add(jLabel1, gbc);
+        
+        // --- 2. Secret Word Reveal Row ---
+        gbc.gridy = 1;
+        gbc.insets = new java.awt.Insets(0, 0, 30, 0);
+        jLabel2.setText("The word was: " + word.toUpperCase());
+        jLabel2.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 18));
+        this.add(jLabel2, gbc);
+        
+        // --- 3. Play Again Button Row ---
+        gbc.gridy = 2;
+        gbc.insets = new java.awt.Insets(10, 0, 10, 0);
+        jButton1.setText("PLAY AGAIN");
+        jButton1.setPreferredSize(new java.awt.Dimension(180, 45));
+        jButton1.addActionListener(e -> {
+            if (this.frame != null) {
+                this.frame.showPanel("cardMainMenu"); 
+            }
+        });
+        this.add(jButton1, gbc);
+        
+        // --- 4. EXIT Button Row (Placed right at the bottom!) ---
+        gbc.gridy = 3; // Row index 3 sits neatly beneath Play Again
+        gbc.insets = new java.awt.Insets(10, 0, 10, 0);
+        btnExit.setText("EXIT");
+        btnExit.setPreferredSize(new java.awt.Dimension(180, 45));
+        
+        // Add the click handler to kill the runtime instance immediately
+        btnExit.addActionListener(e -> {
+            System.exit(0);
+        });
+        this.add(btnExit, gbc);
+        
+        this.revalidate();
+        this.repaint();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,8 +104,6 @@ public class ResultPanel extends javax.swing.JPanel {
         playAgain = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
         resultLabel = new javax.swing.JLabel();
-
-        setPreferredSize(new java.awt.Dimension(400, 450));
 
         playAgain.setText("PLAY AGAIN");
         playAgain.addActionListener(this::playAgainActionPerformed);
