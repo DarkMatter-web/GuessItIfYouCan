@@ -24,7 +24,8 @@ public class MainGUI extends javax.swing.JFrame {
         
         // 2. Add your application panel objects to the layout structure deck
         mainPanel.add(new MenuPanel(this), "cardMainMenu");
-        mainPanel.add(new SinglePanel(this), "cardSinglePlayer");
+        // FIX: Pass default difficulty '1' to satisfy the SinglePanel constructor
+        mainPanel.add(new SinglePanel(this, 1), "cardSinglePlayer");
         mainPanel.add(new MultiPanel(), "cardMultiPlayer");
         mainPanel.add(new WordEntryPanel(this), "cardWordEntry");
         mainPanel.add(new ResultPanel(this, false, ""), "cardResults");
@@ -36,7 +37,7 @@ public class MainGUI extends javax.swing.JFrame {
         // 4. FORCE EXPLICIT WINDOW EXPANSION TO PREVENT SQUISHING BUTTONS OFF-SCREEN
         this.setMinimumSize(new java.awt.Dimension(450, 650));
         this.setPreferredSize(new java.awt.Dimension(450, 650));
-        this.setSize(new java.awt.Dimension(450, 650)); // Force physical width and height
+        this.setSize(new java.awt.Dimension(450, 650)); 
         
         mainPanel.setMinimumSize(new java.awt.Dimension(450, 650));
         mainPanel.setPreferredSize(new java.awt.Dimension(450, 650));
@@ -55,7 +56,8 @@ public class MainGUI extends javax.swing.JFrame {
         if (singlePanel != null) {
             mainPanel.remove(singlePanel);
         }
-        singlePanel = new SinglePanel(this);
+        // FIX: Pass default difficulty '1' here as well
+        singlePanel = new SinglePanel(this, 1);
         mainPanel.add(singlePanel, "single");
         showPanel("single");
     }
@@ -64,10 +66,10 @@ public class MainGUI extends javax.swing.JFrame {
         if (singlePanel != null) {
             mainPanel.remove(singlePanel);
         }
-        // Create a fresh game panel instance
-        singlePanel = new SinglePanel(this);
+        // FIX: Pass default difficulty '1' to satisfy the compiler parameters
+        singlePanel = new SinglePanel(this, 1);
         
-        // Inject the word typed on your virtual keyboard into the game board engine!
+        // Inject the word typed on your virtual keyboard into the game board engine
         singlePanel.setSecretWord(customSecretWord);
         
         mainPanel.add(singlePanel, "multiGame");
@@ -89,9 +91,9 @@ public class MainGUI extends javax.swing.JFrame {
         mainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(450, 600));
+        setPreferredSize(new java.awt.Dimension(450, 650));
 
-        mainPanel.setPreferredSize(new java.awt.Dimension(450, 600));
+        mainPanel.setPreferredSize(new java.awt.Dimension(450, 650));
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -101,7 +103,7 @@ public class MainGUI extends javax.swing.JFrame {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -112,7 +114,7 @@ public class MainGUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
 
         pack();

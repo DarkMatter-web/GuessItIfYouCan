@@ -83,9 +83,10 @@ public class MenuPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         if (frame != null) {
-            frame.startSinglePlayer();
+            frame.showPanel("cardDifficulty"); // Flips view to your difficulty menu choices!
         }
-    }                                        
+    }
+                                        
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         if (frame != null) {

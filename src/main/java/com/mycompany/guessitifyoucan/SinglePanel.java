@@ -19,7 +19,7 @@ public class SinglePanel extends javax.swing.JPanel {
     /**
      * Creates new form SinglePanel
      */
-    public SinglePanel(MainGUI frame) {
+    public SinglePanel(MainGUI frame, int difficulty) {
         initComponents();
         this.frame = frame;
         
@@ -52,6 +52,8 @@ public class SinglePanel extends javax.swing.JPanel {
         this.removeAll();
         this.add(gridPanel, gbcGrid);
         this.add(keyboardPanel, gbcKbd);
+        
+        this.setLayout(new java.awt.GridBagLayout());
         
         createGrid();
         createKeyboard();
