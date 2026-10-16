@@ -16,9 +16,8 @@ public class SinglePanel extends javax.swing.JPanel {
     private String secretWord;
     private JButton[] keyboardButtons = new JButton[26];
     
-    /**
-     * Creates new form SinglePanel
-     */
+    // Inside SinglePanel.java
+    // FIX: Change the signature to accept 'int difficulty'
     public SinglePanel(MainGUI frame, int difficulty) {
         initComponents();
         this.frame = frame;
@@ -26,18 +25,17 @@ public class SinglePanel extends javax.swing.JPanel {
         // 1. Force the main background container layout to use GridBagLayout explicitly
         this.setLayout(new java.awt.GridBagLayout());
         
-        // 2. Clear out any bad layout definitions and create clean constraints for the Guess Grid
+        // 2. Setup your pristine, centered GridBagConstraints layout definitions
         java.awt.GridBagConstraints gbcGrid = new java.awt.GridBagConstraints();
         gbcGrid.gridx = 0;
         gbcGrid.gridy = 0;
         gbcGrid.gridwidth = 1;
         gbcGrid.gridheight = 1;
         gbcGrid.weightx = 1.0;
-        gbcGrid.weighty = 0.5; // Distributes space evenly inside the window frame
-        gbcGrid.anchor = java.awt.GridBagConstraints.SOUTH; // Pulls the grid down closer to the center
-        gbcGrid.insets = new java.awt.Insets(40, 0, 10, 0); // Adds a clean 10px buffer on the bottom
+        gbcGrid.weighty = 0.5; 
+        gbcGrid.anchor = java.awt.GridBagConstraints.SOUTH; 
+        gbcGrid.insets = new java.awt.Insets(40, 0, 10, 0); 
         
-        // 3. Create clean constraints for the Virtual Keyboard Deck
         java.awt.GridBagConstraints gbcKbd = new java.awt.GridBagConstraints();
         gbcKbd.gridx = 0;
         gbcKbd.gridy = 1;
@@ -45,29 +43,27 @@ public class SinglePanel extends javax.swing.JPanel {
         gbcKbd.gridheight = 1;
         gbcKbd.weightx = 1.0;
         gbcKbd.weighty = 0.5;
-        gbcKbd.anchor = java.awt.GridBagConstraints.NORTH; // Pulls the keyboard up closer to the center
-        gbcKbd.insets = new java.awt.Insets(10, 0, 40, 0); // Adds a clean 40px margin at the bottom of the window
+        gbcKbd.anchor = java.awt.GridBagConstraints.NORTH; 
+        gbcKbd.insets = new java.awt.Insets(10, 0, 40, 0); 
         
-        // 4. Force NetBeans to remount the panels using our clean code constraints
+        // 3. Remount the panels programmatically using your clean positioning constraints
         this.removeAll();
         this.add(gridPanel, gbcGrid);
         this.add(keyboardPanel, gbcKbd);
         
-        this.setLayout(new java.awt.GridBagLayout());
-        
         createGrid();
         createKeyboard();
         
-        // Ensure the sub-containers claim proper dimensions
         gridPanel.setPreferredSize(new java.awt.Dimension(400, 250));
         keyboardPanel.setPreferredSize(new java.awt.Dimension(400, 220));
         
-        secretWord = WordLab.single(1);
+        // FIX: Inject the chosen difficulty integer into your game word library loop!
+        secretWord = WordLab.single(difficulty); 
         
-        // 5. Refresh the frame graphics layout to draw the changes instantly
         this.revalidate();
         this.repaint();
     }
+
 
 
     public void setSecretWord(String customWord) {

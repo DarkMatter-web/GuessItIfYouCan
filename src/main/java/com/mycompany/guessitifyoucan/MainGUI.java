@@ -16,6 +16,9 @@ public class MainGUI extends javax.swing.JFrame {
     /**
      * Creates new form MainGUI
      */
+    /**
+     * Creates new form MainGUI
+     */
     public MainGUI() {
         initComponents();
         
@@ -24,7 +27,10 @@ public class MainGUI extends javax.swing.JFrame {
         
         // 2. Add your application panel objects to the layout structure deck
         mainPanel.add(new MenuPanel(this), "cardMainMenu");
-        // FIX: Pass default difficulty '1' to satisfy the SinglePanel constructor
+        
+        // ADD / VERIFY THIS LINE IS EXACTLY MATCHING:
+        mainPanel.add(new DifficultyPanel(this), "cardDifficulty"); 
+        
         mainPanel.add(new SinglePanel(this, 1), "cardSinglePlayer");
         mainPanel.add(new MultiPanel(), "cardMultiPlayer");
         mainPanel.add(new WordEntryPanel(this), "cardWordEntry");
@@ -34,7 +40,7 @@ public class MainGUI extends javax.swing.JFrame {
         java.awt.CardLayout cl = (java.awt.CardLayout) mainPanel.getLayout();
         cl.show(mainPanel, "cardMainMenu");
         
-        // 4. FORCE EXPLICIT WINDOW EXPANSION TO PREVENT SQUISHING BUTTONS OFF-SCREEN
+        // 4. Force explicit window expansion to prevent squishing layout elements
         this.setMinimumSize(new java.awt.Dimension(450, 650));
         this.setPreferredSize(new java.awt.Dimension(450, 650));
         this.setSize(new java.awt.Dimension(450, 650)); 
@@ -46,21 +52,26 @@ public class MainGUI extends javax.swing.JFrame {
         this.pack(); 
         this.setLocationRelativeTo(null); 
     }
+
     
     public void showPanel(String panelName) {
         java.awt.CardLayout layout = (java.awt.CardLayout) mainPanel.getLayout();
         layout.show(mainPanel, panelName);
     }
     
-    public void startSinglePlayer() {
+    // Inside MainGUI.java
+    // FIX: Add 'int difficulty' to the method signature parameter
+    public void startSinglePlayer(int difficulty) {
         if (singlePanel != null) {
             mainPanel.remove(singlePanel);
         }
-        // FIX: Pass default difficulty '1' here as well
-        singlePanel = new SinglePanel(this, 1);
+        
+        // Pass the chosen difficulty level right into your SinglePanel constructor match
+        singlePanel = new SinglePanel(this, difficulty);
         mainPanel.add(singlePanel, "single");
         showPanel("single");
     }
+
     
     public void startMultiPlayer(String customSecretWord) {
         if (singlePanel != null) {
